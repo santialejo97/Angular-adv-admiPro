@@ -6,10 +6,11 @@ import { AppRoutingModule } from './app-routing.module';
 import { AuthModule } from './auth/auth.module';
 
 import { NopagesfoundComponent } from './nopagesfound/nopagesfound.component';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [AppComponent, NopagesfoundComponent],
-  imports: [BrowserModule, AppRoutingModule, AuthModule],
+  imports: [BrowserModule, AppRoutingModule, AuthModule, RouterModule],
   providers: [],
   bootstrap: [AppComponent],
 })
