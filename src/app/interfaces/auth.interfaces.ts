@@ -1,3 +1,5 @@
+import { Usuario } from '../models/usuarios.model';
+
 export interface AuthForm {
   email: string;
   password: string;
@@ -14,4 +16,5 @@ export interface respAuth {
 export interface Renovar {
   ok: boolean;
   token: string;
+  user: Usuario;
 }

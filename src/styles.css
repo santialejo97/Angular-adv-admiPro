@@ -15,3 +15,10 @@
   justify-content: center;
   align-items: center;
 }
+
+.img-avatar {
+  width: 420px;
+  height: 300px;
+  margin-bottom: 20px;
+  border-radius: 30px;
+}

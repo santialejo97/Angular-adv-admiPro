@@ -4,6 +4,7 @@ import { AccountSettingComponent } from './account-setting/account-setting.compo
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { Graficas1Component } from './graficas1/graficas1.component';
 import { PagesComponent } from './pages.component';
+import { PerfilComponent } from './perfil/perfil.component';
 import { ProgressComponent } from './progress/progress.component';
 import { PromesasComponent } from './promesas/promesas.component';
 import { RxjsComponent } from './rxjs/rxjs.component';
@@ -42,6 +43,11 @@ const routes: Routes = [
         path: 'rxjs',
         component: RxjsComponent,
         data: { titulo: 'Rxjs' },
+      },
+      {
+        path: 'perfil',
+        component: PerfilComponent,
+        data: { titulo: 'Perfil' },
       },
       {
         path: '',

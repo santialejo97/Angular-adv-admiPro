@@ -6,6 +6,8 @@ import { environment } from 'src/environments/environment';
 import { RegisterForm, respRegister } from '../interfaces/register.interfaces';
 import { AuthForm, respAuth, Renovar } from '../interfaces/auth.interfaces';
 import { Router } from '@angular/router';
+import { Usuario } from '../models/usuarios.model';
+import { update, User } from '../interfaces/user.interfaces';
 
 declare const gapi: any;
 
@@ -15,6 +17,7 @@ declare const gapi: any;
 export class UserService {
   private url: string = environment.urlBase;
   public auth2: any;
+  public user!: Usuario;
 
   constructor(
     private http: HttpClient,
@@ -22,6 +25,10 @@ export class UserService {
     private router: Router
   ) {
     this.googleInit();
+  }
+
+  get getToken(): string {
+    return localStorage.getItem('token') || '';
   }
 
   googleInit() {
@@ -57,7 +64,6 @@ export class UserService {
   }
 
   loginGoogle(token: string): Observable<respAuth> {
-    console.log(token);
     return this.http.post<respAuth>(`${this.url}/auth/google`, { token }).pipe(
       tap(({ tokenBack, ok, msg }) => {
         console.log(msg);
@@ -68,13 +74,15 @@ export class UserService {
   }
 
   renovarToken(): Observable<Renovar> {
-    const tokenNavegador = localStorage.getItem('token');
+    const tokenNavegador = this.getToken;
     const headers = new HttpHeaders({
       'x-token': tokenNavegador || '',
     });
 
     return this.http.get<Renovar>(`${this.url}/auth/renew`, { headers }).pipe(
-      tap(({ token }) => {
+      tap(({ token, user }) => {
+        const { name, email, role, google, img = '', uid } = user;
+        this.user = new Usuario(name, email, '', role, google, img, uid);
         localStorage.setItem('token', token || '');
       }),
       catchError(({ ok }) => of(ok))
@@ -88,5 +96,23 @@ export class UserService {
         this.router.navigateByUrl('/auth/login');
       });
     });
+  }
+
+  update(data: { name: string; email: string }): Observable<update> {
+    const headers = new HttpHeaders({
+      'x-token': this.getToken || '',
+    });
+    const body = {
+      name: data.name,
+      email: data.email,
+      role: this.user.role,
+    };
+    return this.http.put<update>(
+      `${this.url}/users/update${this.user.uidUser}`,
+      body,
+      {
+        headers,
+      }
+    );
   }
 }

@@ -18,12 +18,12 @@ export class AuthGuard implements CanActivate {
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     return this.user.renovarToken().pipe(
-      tap(({ ok }) => {
+      map(({ ok }) => {
         if (!ok) {
           this.router.navigateByUrl('/auth/login');
         }
-      }),
-      map(({ ok }) => ok)
+        return ok;
+      })
     );
   }
 }

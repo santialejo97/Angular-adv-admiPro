@@ -6,7 +6,6 @@ import { Observer } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { AuthForm, respAuth } from '../../interfaces/auth.interfaces';
 import Swal from 'sweetalert2';
-import { async } from '@angular/core/testing';
 
 declare const gapi: any;
 
