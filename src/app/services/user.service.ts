@@ -1,13 +1,19 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, NgZone } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { catchError, tap, map } from 'rxjs/operators';
+import { catchError, tap, map, delay } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { RegisterForm, respRegister } from '../interfaces/register.interfaces';
 import { AuthForm, respAuth, Renovar } from '../interfaces/auth.interfaces';
 import { Router } from '@angular/router';
 import { Usuario } from '../models/usuarios.model';
-import { update, User } from '../interfaces/user.interfaces';
+import {
+  update,
+  User,
+  CargarUsers,
+  Users,
+  Delete,
+} from '../interfaces/user.interfaces';
 
 declare const gapi: any;
 
@@ -114,5 +120,53 @@ export class UserService {
         headers,
       }
     );
+  }
+
+  cargarUsuarios(desde: number = 5): Observable<Users> {
+    return this.http
+      .get<CargarUsers>(`${this.url}/users?page=${desde}`, {
+        headers: {
+          'x-token': this.getToken || '',
+        },
+      })
+      .pipe(
+        delay(300),
+        map((resp) => {
+          const usuarios = resp.users.map(
+            (user) =>
+              new Usuario(
+                user.name,
+                user.email,
+                '',
+                user.role,
+                user.google,
+                user.img,
+                user.uid
+              )
+          );
+
+          return { total: resp.total, usuarios };
+        })
+      );
+  }
+
+  eliminarUsuario(user: Usuario): Observable<Delete> {
+    console.log('usuario eliminado');
+    const headers = new HttpHeaders({
+      'x-token': this.getToken,
+    });
+    return this.http.delete<Delete>(`${this.url}/users/delete${user.uid}`, {
+      headers,
+    });
+  }
+
+  updateRole(user: Usuario): Observable<update> {
+    const headers = new HttpHeaders({
+      'x-token': this.getToken || '',
+    });
+
+    return this.http.put<update>(`${this.url}/users/update${user.uid}`, user, {
+      headers,
+    });
   }
 }
