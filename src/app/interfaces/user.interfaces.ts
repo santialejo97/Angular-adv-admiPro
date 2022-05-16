@@ -32,3 +32,9 @@ export interface Delete {
   msg: string;
   uid: string;
 }
+
+export interface UserHospital {
+  id: string;
+  name: string;
+  img: string;
+}

@@ -19,6 +19,8 @@ import { PerfilComponent } from './perfil/perfil.component';
 import { UsuariosComponent } from './mantenimientos/usuarios/usuarios.component';
 import { MedicosComponent } from './mantenimientos/medicos/medicos.component';
 import { HospitalesComponent } from './mantenimientos/hospitales/hospitales.component';
+import { PipesModule } from '../pipes/pipes.module';
+import { MedicoComponent } from './mantenimientos/medicos/medico/medico.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +35,7 @@ import { HospitalesComponent } from './mantenimientos/hospitales/hospitales.comp
     UsuariosComponent,
     MedicosComponent,
     HospitalesComponent,
+    MedicoComponent,
   ],
   imports: [
     CommonModule,
@@ -41,6 +44,7 @@ import { HospitalesComponent } from './mantenimientos/hospitales/hospitales.comp
     FormsModule,
     ReactiveFormsModule,
     ComponentsModule,
+    PipesModule,
   ],
   exports: [
     DashboardComponent,

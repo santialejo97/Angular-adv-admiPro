@@ -4,6 +4,8 @@ import { environment } from 'src/environments/environment';
 import { map } from 'rxjs/operators';
 import { Busqueda } from '../interfaces/busqueda.interfaces';
 import { Usuario } from '../models/usuarios.model';
+import { Hospital } from '../models/hospitales.model';
+import { Medico } from '../models/medicos.model';
 
 @Injectable({
   providedIn: 'root',
@@ -32,6 +34,26 @@ export class BusquedasService {
     );
   }
 
+  transaformarHospitales(resultados: any[]): Hospital[] {
+    return resultados.map(
+      (hospital: Hospital) =>
+        new Hospital(hospital.name, hospital._id, hospital.img, hospital.user)
+    );
+  }
+
+  transaformarMedicos(resultados: any[]): Medico[] {
+    return resultados.map(
+      (medico: Medico) =>
+        new Medico(
+          medico.name,
+          medico._id,
+          medico.img,
+          medico.user,
+          medico.hospital
+        )
+    );
+  }
+
   buscador(tipo: 'usuarios' | 'medicos' | 'hospitales', termino: string = '') {
     const url = `${this.url}/search/collecion/${tipo}/${termino}`;
     const headers = new HttpHeaders({
@@ -43,6 +65,12 @@ export class BusquedasService {
         switch (tipo) {
           case 'usuarios':
             return this.transaformarUsuarios(resp.resultados);
+            break;
+          case 'hospitales':
+            return this.transaformarHospitales(resp.resultados);
+            break;
+          case 'medicos':
+            return this.transaformarMedicos(resp.resultados);
             break;
 
           default:
