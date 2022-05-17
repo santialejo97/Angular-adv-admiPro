@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { map } from 'rxjs/operators';
-import { Busqueda } from '../interfaces/busqueda.interfaces';
+import { Busqueda, BusquedaTotal } from '../interfaces/busqueda.interfaces';
 import { Usuario } from '../models/usuarios.model';
 import { Hospital } from '../models/hospitales.model';
 import { Medico } from '../models/medicos.model';
@@ -78,5 +78,14 @@ export class BusquedasService {
         }
       })
     );
+  }
+
+  busquedaGlobal(termino: string) {
+    const url = `${this.url}/search/${termino}`;
+    const headers = new HttpHeaders({
+      'x-token': this.getToken,
+    });
+
+    return this.http.get<BusquedaTotal>(url, { headers });
   }
 }

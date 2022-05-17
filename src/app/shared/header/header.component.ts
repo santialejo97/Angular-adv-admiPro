@@ -11,7 +11,7 @@ import { Usuario } from 'src/app/models/usuarios.model';
 export class HeaderComponent implements OnInit {
   userModel!: Usuario;
 
-  constructor(private user: UserService) {
+  constructor(private user: UserService, private router: Router) {
     this.userModel = user.user;
   }
 
@@ -19,5 +19,13 @@ export class HeaderComponent implements OnInit {
 
   logout() {
     this.user.logout();
+  }
+
+  buscar(termino: string) {
+    if (termino.length === 0) {
+      this.router.navigateByUrl(`pages/dashboard/dash`);
+      return;
+    }
+    this.router.navigateByUrl(`pages/dashboard/buscar/${termino}`);
   }
 }

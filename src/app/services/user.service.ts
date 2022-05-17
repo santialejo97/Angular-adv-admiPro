@@ -62,19 +62,21 @@ export class UserService {
 
   loginUser(formData: AuthForm): Observable<respAuth> {
     return this.http.post<respAuth>(`${this.url}/auth/`, formData).pipe(
-      tap(({ token, ok }) => {
+      tap(({ token, ok, menu }) => {
         console.log('login');
         localStorage.setItem('token', token || '');
+        localStorage.setItem('menu', JSON.stringify(menu));
       })
     );
   }
 
   loginGoogle(token: string): Observable<respAuth> {
     return this.http.post<respAuth>(`${this.url}/auth/google`, { token }).pipe(
-      tap(({ tokenBack, ok, msg }) => {
+      tap(({ tokenBack, ok, msg, menu }) => {
         console.log(msg);
         console.log(tokenBack);
         localStorage.setItem('token', tokenBack || '');
+        localStorage.setItem('menu', JSON.stringify(menu));
       })
     );
   }
@@ -86,9 +88,10 @@ export class UserService {
     });
 
     return this.http.get<Renovar>(`${this.url}/auth/renew`, { headers }).pipe(
-      tap(({ token, user }) => {
+      tap(({ token, user, menu }) => {
         const { name, email, role, google, img = '', uid } = user;
         this.user = new Usuario(name, email, '', role, google, img, uid);
+        localStorage.setItem('menu', JSON.stringify(menu));
         localStorage.setItem('token', token || '');
       }),
       catchError(({ ok }) => of(ok))
@@ -96,6 +99,7 @@ export class UserService {
   }
 
   logout() {
+    localStorage.removeItem('menu');
     localStorage.removeItem('token');
     this.auth2.signOut().then(() => {
       this.ngZone.run(() => {
