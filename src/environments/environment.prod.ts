@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  urlBase: 'http://localhost:3005/api',
+  urlBase: 'https://adminpro-backen-hospitales.herokuapp.com/api',
 };
